@@ -8,6 +8,7 @@ import com.movie.system.repository.MovieRepository;
 import com.movie.system.service.MoviesService;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,9 +62,7 @@ public class MovieController {
   // get a single Movie by Name
   @GetMapping(value = "/movies", params = "name", produces = "application/json")
   public Movie getMovieByName(@RequestParam(value = "name") String name) throws IOException {
-    Movie nmovie = new Movie();
-    nmovie = movieRepo.findMovieByName(name);
-    return service.buildMoviewithDetails(serviceURL, nmovie);
+    return service.buildMoviewithDetails(serviceURL, getAllMovies().stream().filter(m -> m.getName().equals(name)).findFirst().get());
   }
 
   // Update Movie
